@@ -7,8 +7,12 @@ function siri(observer) {
 }
 
 class SiriFactory {
+  constructor(subscribe) {
+    this._subscribe = subscribe;
+  }
+
   subscribe(observer) {
-    siri(observer);
+    this._subscribe(observer);
   }
 }
 
@@ -18,5 +22,5 @@ const observer = {
   complete() { console.log("✅ Done"); }
 };
 
-const stupidSiri = new SiriFactory();
+const stupidSiri = new SiriFactory(siri);
 stupidSiri.subscribe(observer);
