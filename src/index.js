@@ -6,10 +6,17 @@ function siri(observer) {
   }, 3000);
 }
 
+class SiriFactory {
+  subscribe(observer) {
+    siri(observer);
+  }
+}
+
 const observer = {
   next(x)    { console.log("☕️ Time to drink " + x); },
   error(err) { console.log("❌ Oops " + err); },
   complete() { console.log("✅ Done"); }
 };
 
-siri(observer)
+const stupidSiri = new SiriFactory();
+stupidSiri.subscribe(observer);
