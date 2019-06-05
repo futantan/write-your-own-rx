@@ -1,15 +1,15 @@
-function siri(callback) {
-  callback.next(1);
+function siri(observer) {
+  observer.next(1);
   setTimeout(() => {
-    callback.next(2);
-    callback.complete();
+    observer.next(2);
+    observer.complete();
   }, 3000);
 }
 
-const callback = {
+const observer = {
   next(x)    { console.log("☕️ Time to drink " + x); },
   error(err) { console.log("❌ Oops " + err); },
   complete() { console.log("✅ Done"); }
 };
 
-siri(callback)
+siri(observer)
