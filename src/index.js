@@ -11,3 +11,5 @@ const callback = {
   error(err) { console.log("❌ Oops " + err); },
   complete() { console.log("✅ Done"); }
 };
+
+siri(callback)
