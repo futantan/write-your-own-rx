@@ -1,1 +1,1 @@
-console.log('Hello World')
+const callback = () => console.log('Hello World')
