@@ -4,15 +4,16 @@ class Observable {
   }
 
   subscribe(observer) {
-    this._subscribe(observer);
+    return this._subscribe(observer);
   }
 
   static timeout(time) {
     return new Observable((observer) => {
-      setTimeout(() => {
+      const handle = setTimeout(() => {
         observer.next();
         observer.complete();
       }, time)
+      return { unsubscribe: () => clearTimeout(handle)  }
     })
   }
 }
@@ -25,4 +26,5 @@ const observer = {
 
 const observable$ = Observable.timeout(3000)
 
-observable$.subscribe(observer);
+const { unsubscribe } = observable$.subscribe(observer);
+unsubscribe();
