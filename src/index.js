@@ -6,6 +6,15 @@ class Observable {
   subscribe(observer) {
     this._subscribe(observer);
   }
+
+  static timeout(time) {
+    return new Observable((observer) => {
+      setTimeout(() => {
+        observer.next();
+        observer.complete();
+      }, time)
+    })
+  }
 }
 
 const observer = {
@@ -14,12 +23,6 @@ const observer = {
   complete() { console.log("✅ Done"); }
 };
 
-const stupidSiri = new Observable(observer => {
-  observer.next(1);
-  setTimeout(() => {
-    observer.next(2);
-    observer.complete();
-  }, 3000);
-});
+const observable$ = Observable.timeout(3000)
 
-stupidSiri.subscribe(observer);
+observable$.subscribe(observer);
