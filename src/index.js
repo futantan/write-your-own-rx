@@ -16,6 +16,16 @@ class Observable {
       return { unsubscribe: () => clearTimeout(handle)  }
     })
   }
+
+  map(projection) {
+    return new Observable(observer => {
+      return this.subscribe({
+        next(v) { observer.next(projection(v)); },
+        complete() { observer.complete(); },
+        error(err) { observer.error(err); }
+      })
+    });
+  }
 }
 
 const observer = {
@@ -24,7 +34,7 @@ const observer = {
   complete() { console.log("✅ Done"); }
 };
 
-const observable$ = Observable.timeout(3000)
+const observable$ = Observable.timeout(3000).map(_ => 200)
 
 const { unsubscribe } = observable$.subscribe(observer);
-unsubscribe();
+// unsubscribe();
