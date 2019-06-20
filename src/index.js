@@ -8,11 +8,14 @@ class Observable {
   }
 
   static timeout(time) {
+    let obs = null;
+    const handle = setTimeout(() => {
+      if (!obs) return;
+      obs.next();
+      obs.complete();
+    }, time)
     return new Observable((observer) => {
-      const handle = setTimeout(() => {
-        observer.next();
-        observer.complete();
-      }, time)
+      obs = observer;
       return { unsubscribe: () => clearTimeout(handle)  }
     })
   }
@@ -26,6 +29,16 @@ class Observable {
       })
     });
   }
+
+  filter(fn) {
+    return new Observable(observer => {
+      return this.subscribe({
+        next(v) { if(fn(v)) {observer.next(v);} },
+        complete() { observer.complete(); },
+        error(err) { observer.error(err); }
+      })
+    });
+  }
 }
 
 const observer = {
@@ -34,7 +47,8 @@ const observer = {
   complete() { console.log("✅ Done"); }
 };
 
-const observable$ = Observable.timeout(3000).map(_ => 200)
+const observable$ = Observable.timeout(3000)
 
-const { unsubscribe } = observable$.subscribe(observer);
+observable$.subscribe(observer);
+setTimeout(() => observable$.subscribe(observer), 4000)
 // unsubscribe();
